@@ -37,24 +37,25 @@ def request_url(url_path):
             data['stop-and-search'] = ",".join(data.get('stop-and-search'))
         logging.debug(response)
         out_file = open("json_output.json", "w")
-        json.dump(response, out_file)
+        if not OSError:
+            json.dump(response, out_file)
         out_file.close()
         logging.info(msg='JSON file is created')
     except (ConnectionError, requests.exceptions.HTTPError,
             requests.exceptions.ConnectTimeout) as error:
-        logging.debug(error)
+        logging.error(error)
     except OSError as err:
-        logging.debug(err)
+        logging.error(err)
     except json.JSONDecodeError as error:
-        logging.debug(error)
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
 path = 'https://data.police.uk/api/crimes-street-dates'
-logging.error(request_url(path), msg='on request_url function')
+logging.debug(request_url(path))
 
 
 def to_csv(file_path):
@@ -76,19 +77,18 @@ def to_csv(file_path):
     try:
         logging.info(msg='Response open for creating CSV file')
         json_read = pd.read_json(file_path)
-        json_read.to_csv('csv_output.csv', index=False)
-        logging.info(msg='Successfully created a CSV file')
-    except FileNotFoundError as error:
-        logging.debug(error)
-    except ValueError as error:
-        logging.debug(error)
+        if not FileNotFoundError:
+            json_read.to_csv('csv_output.csv', index=False)
+            logging.info(msg='Successfully created a CSV file')
+    except (FileNotFoundError, ValueError) as error:
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
-logging.error(to_csv('my_file.json'), msg='on to_csv function')
+logging.debug(to_csv('my_file.json'))
 
 
 def csv_xlsx(file_path):
@@ -112,19 +112,20 @@ def csv_xlsx(file_path):
         wb = Workbook()
         ws = wb.active
         with open(file_path, 'r') as f:
-            for row in csv.reader(f):
-                ws.append(row)
+            if not OSError:
+                for row in csv.reader(f):
+                    ws.append(row)
         wb.save('Excel_output.xlsx')
         logging.info(msg='Successfully created excel file')
     except (FileNotFoundError, ValueError, OSError) as error:
-        logging.debug(error)
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
-logging.error(csv_xlsx('csv_output.csv'), msg='on csv_xlsx function')
+logging.debug(csv_xlsx('csv_output.csv'))
 
 
 def csv_html(file_path):
@@ -146,18 +147,19 @@ def csv_html(file_path):
     try:
         logging.info(msg='Response open for creating HTML file')
         read_csv = pd.read_csv(file_path)
-        read_csv.to_html("HTML_output.html", index=False)
-        read_csv.to_html()
+        if not OSError:
+            read_csv.to_html("HTML_output.html", index=False)
+            read_csv.to_html()
         logging.info(msg='Successfully created HTML file ')
     except (FileNotFoundError, ValueError) as error:
-        logging.debug(error)
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
-logging.error(csv_html("csv_output.csv"), msg='on csv_html function')
+logging.debug(csv_html("csv_output.csv"))
 
 
 def html_pdf(file_path):
@@ -179,17 +181,18 @@ def html_pdf(file_path):
     try:
         logging.info(msg='Response open for creating PDF file')
         config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
-        pdfkit.from_file(file_path, 'PDF_output.pdf', configuration=config)
+        if not OSError or IOError:
+            pdfkit.from_file(file_path, 'PDF_output.pdf', configuration=config)
         logging.info(msg='Successfully created PDF file')
     except (OSError, IOError, ValueError) as error:
-        logging.debug(error)
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
-logging.error(html_pdf('HTML_output.html'), msg='on html_pdf function')
+logging.debug(html_pdf('HTML_output.html'))
 
 
 def html_xml(file_path):
@@ -216,11 +219,11 @@ def html_xml(file_path):
             out.write(etree.tostring(html_read))
         logging.info(msg='Successfully created XML file')
     except (OSError, ValueError) as error:
-        logging.debug(error)
+        logging.error(error)
     except Exception as error:
-        logging.debug(msg='Some other errors: {}'.format(error))
+        logging.error(msg='Some other errors: {}'.format(error))
     finally:
         logging.info(msg='Response closed')
 
 
-logging.error(html_xml("HTML_output.html"), msg='on html_xml function')
+logging.debug(html_xml("HTML_output.html"))
