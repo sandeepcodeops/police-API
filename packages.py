@@ -1,8 +1,7 @@
-from uk_police import uk_police_package
+from file_converter import converter_functions
 
 path = 'https://data.police.uk/api/crimes-street-dates'
-# json_file_path = 'json_output.json'
-# csv_file = 'csv_output.csv'
-# html_file = "HTML_output.html"
-obj = uk_police_package.UKPoliceAPI(url_path=path)
-obj.request_url()
+json_file_path = 'json_output.json'
+csv_file = 'csv_output.csv'
+html_file = "HTML_output.html"
+converter_functions.request_url(url_path=path)
