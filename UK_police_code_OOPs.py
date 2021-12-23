@@ -65,6 +65,16 @@ class UKPoliceAPI:
             logging.info(msg='Response closed')
 
     def json_to_csv(self):
+        """
+        this function represents the file conversion of csv from the JSON file
+
+        Input:
+            :param: the json file as a input
+        Return:
+            :return: the csv file is created
+        Exception:
+            :exception: Value Error, OS error are handled here
+        """
         try:
             logging.info(msg='Response open for creating CSV file')
             pd.read_json(self.file_path).to_csv('csv_output.csv', index=False)
@@ -77,6 +87,16 @@ class UKPoliceAPI:
             logging.info(msg='Response closed')
 
     def csv_to_excel(self):
+        """
+            this function represents the file conversion of excel from the csv file
+
+        Input:
+            :param: the json file as a input
+        Return:
+            :return: the csv file is created
+        Exception:
+            :exception: Value Error, OS error are handled here
+        """
         try:
             logging.info(msg='Response started to create the excel file')
             excel_writer = pd.ExcelWriter('Excel_output.xlsx')
@@ -91,12 +111,22 @@ class UKPoliceAPI:
             logging.info(msg='Response is closed')
 
     def csv_to_html(self):
+        """
+        this function represents the file conversion of html from the csv file
+
+        Input:
+            :param: the json file as a input
+        Return:
+            :return: the csv file is created
+        Exception:
+            :exception: Value Error, OS error are handled here
+        """
         try:
             logging.info(msg='Response started to create the html file')
             self.csv_dataframe.to_html("HTML_output.html", index=False)
             self.csv_dataframe.to_html()
             logging.info(msg='the html file is created')
-        except ValueError as error:
+        except (OSError, ValueError) as error:
             logging.error(error)
         except Exception as error:
             logging.error(error)
@@ -104,11 +134,21 @@ class UKPoliceAPI:
             logging.info(msg='Response is closed')
 
     def csv_to_xml(self):
+        """
+        this function represents the file conversion of xml from the csv file
+
+        Input:
+            :param: the json file as a input
+        Return:
+            :return: the csv file is created
+        Exception:
+            :exception: Value Error, OS error are handled here
+        """
         try:
             logging.info(msg='Response started to create the xml file')
             self.csv_dataframe.to_xml('xml_output.xml')
             logging.info(msg='the xml file is created')
-        except ValueError as error:
+        except (OSError, ValueError) as error:
             logging.error(error)
         except Exception as error:
             logging.error(error)
@@ -116,6 +156,16 @@ class UKPoliceAPI:
             logging.info(msg='Response is closed')
 
     def html_to_pdf(self):
+        """
+            this function represents the file conversion of pdf from the html file
+
+        Input:
+            :param: the json file as a input
+        Return:
+            :return: the csv file is created
+        Exception:
+            :exception: Value Error, OS error are handled here
+        """
         try:
             logging.info(msg='Response started to create the pdf file')
             config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
@@ -133,7 +183,8 @@ path = 'https://data.police.uk/api/crimes-street-dates'
 json_file_path = 'json_output.json'
 csv_file = 'csv_output.csv'
 html_file = "HTML_output.html"
-object_for_class = UKPoliceAPI(url_path=path, file_path=json_file_path, csv_file_path=csv_file, html_file_path=html_file)
+object_for_class = UKPoliceAPI(url_path=path, file_path=json_file_path, csv_file_path=csv_file,
+                               html_file_path=html_file)
 logging.debug(object_for_class.request_url())
 logging.debug(object_for_class.json_to_csv())
 logging.debug(object_for_class.csv_to_xml())
